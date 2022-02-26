@@ -16,7 +16,7 @@ def load_chrome_driver(headless=True):
     options = webdriver.ChromeOptions()
     if headless:
         options.add_argument('headless')
-    options.add_argument(f'user-data-dir={os.path.join(OS_ROOT,"User Data")}')
+    options.add_argument(f'user-data-dir={os.path.join(OS_ROOT,"User Data URL")}')
     options.add_argument('--profile-directory=Default')
     options.add_argument("--start-maximized")
     options.add_argument('--disable-gpu')
