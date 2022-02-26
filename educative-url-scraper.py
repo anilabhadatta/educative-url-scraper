@@ -24,8 +24,7 @@ def load_chrome_driver(headless=True):
     options.add_argument('--log-level=3')
     userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.56 Safari/537.36"
     options.add_argument(f'user-agent={userAgent}')
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager(
-        chrome_type=ChromeType.CHROMIUM).install()), options=options)
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     driver.set_window_size(1920, 1080)
     print("Driver Loaded")
     return driver
