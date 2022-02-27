@@ -16,15 +16,18 @@ def load_chrome_driver(headless=True):
     options = webdriver.ChromeOptions()
     if headless:
         options.add_argument('headless')
-    options.add_argument(f'user-data-dir={os.path.join(OS_ROOT,"User Data URL")}')
+    options.add_argument(
+        f'user-data-dir={os.path.join(OS_ROOT,"User Data URL")}')
     options.add_argument('--profile-directory=Default')
     options.add_argument("--start-maximized")
     options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
     options.add_argument('--log-level=3')
+    options.add_argument('--disable-dev-shm-usage')
     userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.56 Safari/537.36"
     options.add_argument(f'user-agent={userAgent}')
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+    driver = webdriver.Chrome(service=ChromeService(
+        ChromeDriverManager().install()), options=options)
     driver.set_window_size(1920, 1080)
     print("Driver Loaded")
     return driver
@@ -79,14 +82,11 @@ def generate_course_urls():
     save_path = os.path.join(OS_ROOT, "Desktop", "course_urls.txt")
     print('''
                 Course URL Generator Started
-                Go to the url where all courses are listed
     ''')
     driver = load_chrome_driver(headless=False)
-    driver.get("https://educative.io")
-    input("Login and start scraping")
 
     driver.get("https://www.educative.io/explore")
-    sleep(5)
+    sleep(10)
     while True:
         try:
             WebDriverWait(driver, 10).until(
@@ -99,7 +99,7 @@ def generate_course_urls():
     course_urls += find_urls(driver, course_title)
 
     driver.get("https://www.educative.io/paths")
-    sleep(5)
+    sleep(10)
     course_urls += find_urls(driver, path_title)
     with open(save_path, 'w') as f:
         f.write(course_urls)
@@ -146,17 +146,6 @@ def scrap_course_urls():
         raise Exception(e)
 
 
-def login_educative():
-    clear()
-    driver = load_chrome_driver(headless=False)
-    try:
-        driver.get("https://educative.io")
-        input("Press enter to return to Main Menu after Login is successfull")
-    except Exception as e:
-        print("Exception occured, Try again", e)
-    driver.quit()
-
-
 def clear():
     if os.name == "nt":
         os.system('cls')
@@ -175,7 +164,6 @@ if __name__ == '__main__':
 
                         Press 1 to Generate Course/Path Urls
                         Press 2 to Scrap Course Topic Urls
-                        Press 3 to Login if your account isn't signed in
                         Press any key to exit
             ''')
             choice = input("Enter your choice: ")
@@ -183,8 +171,6 @@ if __name__ == '__main__':
                 generate_course_urls()
             elif choice == "2":
                 scrap_course_urls()
-            elif choice == "3":
-                login_educative()
             else:
                 break
         except KeyboardInterrupt:
