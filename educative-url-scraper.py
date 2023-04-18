@@ -67,11 +67,15 @@ def scrape_single_course_url(driver):
 
 def find_urls(driver, title):
     course_urls = ""
+    if("Path" in title):
+        parent_navigator = "../../../../../.."
+    else:
+        parent_navigator = "../../../../.."
     url_elements = driver.find_elements(
         By.CSS_SELECTOR, f"[title*='{title}']")
     for url_element in url_elements:
         course_urls += url_element.find_element(
-            By.XPATH, "../../..").find_element(By.TAG_NAME, "a").get_attribute('href') + "\n"
+            By.XPATH, parent_navigator).find_element(By.TAG_NAME, "a").get_attribute('href') + "\n"
     return course_urls
 
 
